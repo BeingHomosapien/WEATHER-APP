@@ -1,0 +1,15 @@
+.info {
+    font-size:30px;
+    border:2px solid black;
+    max-width:300px;
+    margin:0 auto;
+}
+
+.options{
+    padding:10px;
+    font-size: 25px;
+}
+#options{
+    padding-bottom:5px;
+    font-size: 25px;
+}

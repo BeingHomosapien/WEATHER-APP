@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Webpage For Hackathon</title>
+    <script
+  src="https://code.jquery.com/jquery-3.4.1.js"
+  integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+  crossorigin="anonymous"></script>
+    <link href='Style.css' rel = stylesheet type="text/css">
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <div class='options' align=center>
+    <select id='options' >
+        <Option value='none'>None</Option>
+        <Option value='current'>Current Location</Option>
+        <Option value='other'>Other Location</Option>
+    </select><br>
+    <span id='b1'>
+    <input type='button' id='find' value='Find'></span>
+    </div>
+	
+	<div class='data'>
+		<fieldset>
+			<legend align=center> Enter The details Here</legend>
+			<center>
+			<form>
+				<label>Enter the Place Here</label><br>
+				<input type='text' placeholder="City,State,Country" id='Placename'><br>
+				<input id='submit' type = 'button' value='Submit'>
+			</form>
+			</center>
+	    </fieldset>
+	</div>
+    <div align = center class='info'>
+        <h2 id='city'></h2>
+        <img id ='icon' alt='Weather ICON'>
+        <h1 id='temp'></h1>
+        <p id='desc'></p>
+    </div>
+    <script>
+        $(document).ready(function(){
+            $('.data').hide();
+            $('.info').hide();
+            function weather(lat,lon){
+                var URL = `https://fcc-weather-api.glitch.me/api/current?lat=${lat}&lon=${lon}`
+                $.getJSON(URL,function(data){  
+                    console.log(data);
+                    info(data);
+                });
+            }
+            function info(data){
+                var temp = data.main.temp;
+                var city = data.name;
+                var desc = data.weather[0].description;
+                var icon = data.weather[0].icon;
+                document.getElementById('city').innerHTML = city;
+                document.getElementById('temp').innerHTML = temp+' <sup>o</sup>C';
+                document.getElementById('desc').innerHTML = desc;
+                document.getElementById('icon').setAttribute('src',icon);
+            }
+            
+            function info1(data){
+                var temp = data.temp;
+                var city = data.city_name;
+                var desc = data.weather.description;
+                var icon = data.weather.icon;
+                document.getElementById('city').innerHTML = city;
+                document.getElementById('temp').innerHTML = temp+' <sup>o</sup>C';
+                document.getElementById('desc').innerHTML = desc;
+                document.getElementById('icon').setAttribute('src',icon);
+            }
+            
+            $('#find').click(function(){
+                var x = document.getElementById('options')
+                console.log(x.value)
+                if (x.value == 'current'){
+                    $('.data').hide();
+                    $('.info').hide();
+                    navigator.geolocation.getCurrentPosition(success,error);
+                    function success(position){
+                        var lat = position.coords.latitude;
+                        var lon = position.coords.longitude;
+                        weather(lat,lon);
+                    }
+                    function error(){
+                        window.alert('ERROR Has Occured');
+                    }
+                    $('.info').show();
+                }
+                else if(x.value == 'other'){
+                    $('.data').show();
+                    $('.info').show();
+                    console.log('Success2!!')
+                    $('#submit').click(function(){
+                        var key = "9bca1ef55d12407ebf40247f81797242";
+                        var location = document.getElementById('Placename').value;
+                        var url = "http://api.weatherbit.io/v2.0/current"
+                        axios.get(url,{
+                            params:{
+                            city:location,
+                            key:key}
+                            }).then(function(response){
+                                console.log(response.data.data[0]);
+                                info1(response.data.data[0]);
+                        })
+                    $('.info').show();
+                });
+                }
+                else if (x.value=='none'){
+                    $('.info').hide();
+                    $('.data').hide();
+                }
+            });
+        });
+    </script>
+</html>
+
