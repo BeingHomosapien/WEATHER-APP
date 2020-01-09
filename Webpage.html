@@ -90,7 +90,7 @@
                 }
                 else if(x.value == 'other'){
                     $('.data').show();
-                    $('.info').show();
+                    $('.info').hide();
                     console.log('Success2!!')
                     $('#submit').click(function(){
                         var key = "9bca1ef55d12407ebf40247f81797242";
@@ -104,7 +104,8 @@
                                 console.log(response.data.data[0]);
                                 info1(response.data.data[0]);
                         })
-                    $('.info').show();
+			 $('.info').show();
+                    
                 });
                 }
                 else if (x.value=='none'){
